@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktywna Analiza: Autarkia vs. Merkantylizm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutrals (Linen background, Slate for text) with a subtle accent of Muted Teal. -->
+    <!-- Application Structure Plan: The application uses a thematic, single-page scrolling structure instead of mirroring the report's linear chapters. This design prioritizes direct comparison and user-driven exploration. It starts with a high-level summary, moves to a core interactive side-by-side comparison ('Dwie Doktryny'), features a central radar chart for multi-faceted analysis, provides digestible case studies via interactive cards, and concludes with modern relevance. This flow is designed to guide the user from broad concepts to specific details and back to the big picture, which is more engaging and effective for learning than a traditional report format. -->
+    <!-- Visualization & Content Choices: 1. Core Concepts (Autarky vs. Mercantilism): Goal: Compare. Method: Interactive Radar Chart (Chart.js/Canvas). Interaction: Hover tooltips. Justification: Visually represents the multi-dimensional differences and similarities more effectively than text alone. 2. Comparison Table: Goal: Organize/Compare. Method: Styled HTML Table (Tailwind). Interaction: Row hover highlight. Justification: Retains the clarity of a table for direct feature comparison but with improved UI. 3. Historical Examples: Goal: Inform/Organize. Method: Interactive HTML/CSS cards. Interaction: Click to reveal details. Justification: Breaks down dense text into manageable, engaging chunks. 4. Key Terms: Goal: Inform. Method: Styled HTML blockquotes. Justification: Draws attention to important conceptual definitions within the text flow. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFCFB;
+            color: #334155;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .section-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section-intro {
+            max-width: 48rem;
+            margin: 0 auto 2.5rem auto;
+            text-align: center;
+            color: #475569;
+            line-height: 1.6;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .accent-color {
+            color: #14b8a6;
+        }
+        .accent-bg {
+            background-color: #14b8a6;
+        }
+        .accent-border {
+            border-color: #14b8a6;
+        }
+        nav a {
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: #14b8a6;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 bg-white/80 backdrop-blur-lg z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-bold text-slate-800">Autarkia vs. Merkantylizm</div>
+            <div class="hidden md:flex space-x-6 text-slate-600 font-medium">
+                <a href="#porownanie">Porównanie</a>
+                <a href="#wizualizacja">Wizualizacja</a>
+                <a href="#historia">Historia</a>
+                <a href="#wspolczesnosc">Współczesność</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-20">
+
+        <section id="intro" class="text-center mb-20 md:mb-32">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-4 leading-tight">
+                Samowystarczalność czy Kontrolowany Handel?
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+                Odkryj złożone relacje, wspólne cele i fundamentalne różnice między autarkią a merkantylizmem w interaktywnej analizie.
+            </p>
+        </section>
+
+        <section id="porownanie" class="mb-20 md:mb-32">
+            <h2 class="section-title">Dwie Doktryny w Pigułce</h2>
+            <p class="section-intro">
+                Ta sekcja przedstawia bezpośrednie porównanie kluczowych cech autarkii i merkantylizmu. Zrozumienie ich podstawowych założeń, celów i narzędzi jest fundamentem do dalszej analizy ich wzajemnych wpływów. Zobacz, jak obie ideologie podchodzą do handlu, władzy i bogactwa narodu.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card">
+                    <h3 class="text-2xl font-bold mb-4 text-slate-800">Autarkia</h3>
+                    <div id="autarky-content" class="space-y-4 text-slate-600"></div>
+                </div>
+                <div class="card border-2 accent-border">
+                    <h3 class="text-2xl font-bold mb-4 accent-color">Merkantylizm</h3>
+                    <div id="mercantilism-content" class="space-y-4 text-slate-600"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wizualizacja" class="mb-20 md:mb-32">
+            <h2 class="section-title">Interaktywne Porównanie Wizualne</h2>
+            <p class="section-intro">
+                Wizualizacje pozwalają dostrzec niuanse, które umykają w tekście. Poniższy wykres radarowy porównuje obie doktryny w pięciu kluczowych wymiarach. Najedź kursorem na punkty, aby zobaczyć ocenę. Ta interaktywna reprezentacja pokazuje, gdzie idee się pokrywają, a gdzie fundamentalnie różnią, ilustrując ich złożoną relację.
+            </p>
+            <div class="card">
+                <div class="chart-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="historia" class="mb-20 md:mb-32">
+            <h2 class="section-title">Historyczne Studia Przypadków</h2>
+            <p class="section-intro">
+                Teorie ekonomiczne najlepiej zrozumieć przez pryzmat historii. Poniżej znajdują się przykłady państw i okresów, w których dążono do realizacji ideałów autarkicznych lub merkantylistycznych. Kliknij na kartę, aby dowiedzieć się więcej o konsekwencjach tych polityk i zobaczyć, jak teoria przekładała się na praktykę.
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="case-studies-container">
+            </div>
+        </section>
+
+        <section id="wspolczesnosc" class="mb-20 md:mb-32">
+            <h2 class="section-title">Współczesne Echa</h2>
+            <p class="section-intro">
+                Choć autarkia i merkantylizm to koncepcje historyczne, ich duch wciąż jest obecny w dzisiejszej polityce gospodarczej. Ta sekcja bada, jak dawne idee powracają w nowych formach, od wojen handlowych po dążenie do strategicznej autonomii w kluczowych sektorach. Zobacz, dlaczego te idee pozostają relewantne w zglobalizowanym świecie.
+            </p>
+            <div class="bg-white p-8 rounded-lg border border-slate-200 shadow-sm space-y-6 max-w-4xl mx-auto">
+                <blockquote class="border-l-4 accent-border pl-6 py-2">
+                    <p class="text-slate-700 italic">"Współczesne praktyki, takie jak manipulowanie walutą, środki zniekształcające handel i wysiłki niektórych krajów w celu przyciągnięcia wysoko płatnych gałęzi przemysłu, są określane jako 'merkantylizm innowacyjny'."</p>
+                </blockquote>
+                 <p class="text-slate-600">
+                    Wzrost napięć geopolitycznych i obawy o bezpieczeństwo łańcuchów dostaw skłaniają państwa do ponownego przemyślenia korzyści płynących z globalizacji. Dążenie do samowystarczalności w produkcji półprzewodników, leków czy energii to współczesna forma strategicznej autarkii, motywowana nie ideologią, a pragmatyczną oceną ryzyka.
+                </p>
+                <p class="text-slate-600">
+                    Polityka protekcjonistyczna, taka jak cła i bariery handlowe, przeżywa renesans jako narzędzie ochrony przemysłu krajowego i miejsc pracy, co jest bezpośrednim nawiązaniem do myśli merkantylistycznej. Pokazuje to cykliczną naturę idei ekonomicznych i trwałe napięcie między wolnym handlem a interesem narodowym.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>&copy; 2024 Interaktywna Analiza. Wszelkie prawa zastrzeżone.</p>
+            <p class="text-sm mt-2">Stworzone w celu demonstracji interaktywnej wizualizacji danych na podstawie raportu.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const contentData = {
+                autarky: [
+                    { title: 'Główny Cel', text: 'Samowystarczalność i niezależność w celu zmniejszenia obcych wpływów (ekonomicznych, politycznych, kulturowych). Celem jest bycie odpornym na zmienność losu.' },
+                    { title: 'Podejście do Handlu', text: 'Całkowite zamknięcie gospodarcze lub minimalny handel. Jest to "zamknięta gospodarka", w której kraj funkcjonuje bez wymiany dóbr z innymi narodami.' },
+                    { title: 'Kluczowe Narzędzia', text: 'Zakazy importu, dążenie do pełnej produkcji lokalnej, kontrola państwa nad gospodarką w celu osiągnięcia samowystarczalności.' },
+                ],
+                mercantilism: [
+                    { title: 'Główny Cel', text: 'Budowanie bogatego i potężnego państwa poprzez gromadzenie kruszców (złota i srebra) na wsparcie wojska i ekspansję terytorialną.' },
+                    { title: 'Podejście do Handlu', text: 'Aktywne angażowanie się w handel międzynarodowy i manipulowanie nim w celu osiągnięcia "korzystnego bilansu handlowego" (eksport > import).' },
+                    { title: 'Kluczowe Narzędzia', text: 'Cła, kwoty, monopole, subsydia dla eksporterów, eksploatacja kolonialna w celu pozyskania surowców i rynków zbytu.' },
+                ],
+                caseStudies: [
+                    {
+                        title: 'Chiny Dynastii Ming (XIV w.)',
+                        type: 'Autarkia',
+                        description: 'Wprowadzono reformy antyrynkowe i zakazy handlowe, co doprowadziło do izolacji gospodarczej. Polityka ta zdusiła rozwój kraju na wieki i jest przykładem negatywnych skutków zamknięcia gospodarki.'
+                    },
+                    {
+                        title: 'Korea Północna (XX/XXI w.)',
+                        type: 'Autarkia',
+                        description: 'Współczesny przykład państwa dążącego do autarkii (ideologia Juche). Charakteryzuje się skrajnie ograniczonym handlem, co prowadzi do zależności od pomocy zagranicznej i problemów gospodarczych.'
+                    },
+                    {
+                        title: 'Niemcy Hitlera (lata 30. XX w.)',
+                        type: 'Autarkia',
+                        description: 'Dążenie do samowystarczalności (autarkii) było kluczowym elementem przygotowań do wojny. Polityka "lebensraum" (przestrzeni życiowej) miała na celu zdobycie zasobów niezbędnych do uniezależnienia się od handlu światowego.'
+                    },
+                    {
+                        title: 'Anglia (XVII-XVIII w.)',
+                        type: 'Merkantylizm',
+                        description: 'Klasyczny przykład polityki merkantylistycznej. Akty Nawigacyjne chroniły angielską flotę handlową, a ekspansja kolonialna zapewniała surowce i rynki zbytu, budując potęgę Imperium Brytyjskiego.'
+                    },
+                    {
+                        title: 'Francja za Colberta (XVII w.)',
+                        type: 'Merkantylizm',
+                        description: 'Minister finansów Jean-Baptiste Colbert wdrożył system protekcjonistycznych ceł, subsydiów dla manufaktur i rozwoju floty, aby wzmocnić francuską gospodarkę i potęgę państwa w rywalizacji z Holandią i Anglią.'
+                    },
+                    {
+                        title: 'USA - Ustawa Smoota-Hawleya (1930)',
+                        type: 'Merkantylizm',
+                        description: 'Drastyczne podniesienie ceł na ponad 20 000 towarów. Choć był to środek protekcjonistyczny, uznaje się go za ruch w kierunku autarkii, który pogłębił Wielki Kryzys poprzez załamanie handlu światowego.'
+                    },
+                ]
+            };
+
+            function populateContent(elementId, data) {
+                const container = document.getElementById(elementId);
+                if (!container) return;
+                let html = '';
+                data.forEach(item => {
+                    html += `
+                        <div>
+                            <h4 class="font-semibold text-lg mb-1 text-slate-700">${item.title}</h4>
+                            <p>${item.text}</p>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            }
+
+            populateContent('autarky-content', contentData.autarky);
+            populateContent('mercantilism-content', contentData.mercantilism);
+
+            function populateCaseStudies() {
+                const container = document.getElementById('case-studies-container');
+                if (!container) return;
+                let html = '';
+                contentData.caseStudies.forEach(study => {
+                    const isAutarky = study.type === 'Autarkia';
+                    const typeColor = isAutarky ? 'text-red-600 bg-red-100' : 'accent-color accent-bg bg-opacity-10';
+                    html += `
+                        <div class="card cursor-pointer" onclick="this.querySelector('p').classList.toggle('hidden')">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-bold text-xl text-slate-800">${study.title}</h4>
+                                <span class="text-xs font-semibold px-2 py-1 rounded-full ${typeColor}">${study.type}</span>
+                            </div>
+                            <p class="text-slate-600 hidden">${study.description}</p>
+                             <div class="text-xs text-slate-400 mt-3 text-right">Kliknij, aby rozwinąć</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            }
+            
+            populateCaseStudies();
+
+            function createComparisonChart() {
+                const ctx = document.getElementById('comparisonChart');
+                if (!ctx) return;
+
+                const data = {
+                    labels: [
+                        'Kontrola Państwa', 
+                        'Nacjonalizm Gospodarczy', 
+                        'Zaangażowanie w Handel', 
+                        'Dążenie do Konfliktu', 
+                        'Zależność od Zasobów Zewn.'
+                    ],
+                    datasets: [{
+                        label: 'Autarkia',
+                        data: [10, 9, 1, 7, 2],
+                        fill: true,
+                        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                        borderColor: 'rgb(239, 68, 68)',
+                        pointBackgroundColor: 'rgb(239, 68, 68)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(239, 68, 68)'
+                    }, {
+                        label: 'Merkantylizm',
+                        data: [8, 10, 7, 9, 6],
+                        fill: true,
+                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                        borderColor: 'rgb(20, 184, 166)',
+                        pointBackgroundColor: 'rgb(20, 184, 166)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(20, 184, 166)'
+                    }]
+                };
+
+                const options = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: '#e2e8f0'
+                            },
+                            grid: {
+                                color: '#e2e8f0'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    family: 'Inter, sans-serif'
+                                },
+                                color: '#475569'
+                            },
+                            ticks: {
+                                backdropColor: '#FDFCFB',
+                                color: '#64748b',
+                                stepSize: 2
+                            },
+                            min: 0,
+                            max: 10
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            titleFont: { weight: 'bold' },
+                            bodyFont: { family: 'Inter, sans-serif' },
+                        }
+                    }
+                };
+
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: data,
+                    options: options
+                });
+            }
+
+            createComparisonChart();
+
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
