@@ -225,6 +225,29 @@
             </div>
         </section>
 
+        <section id="economic-doctrines" class="mb-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-[#005CB9]">A Broader Spectrum of Economic Doctrines</h2>
+                <p class="mt-2 text-lg text-gray-600 max-w-3xl mx-auto">Economic policies are not monolithic. This visualization plots different doctrines based on their key principles, revealing the vast range of government involvement and international trade policies.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-center mb-4">Economic Theory Scatter Plot</h3>
+                    <div class="chart-container">
+                        <canvas id="economicScatterChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4 text-center">Each point on this chart represents a different economic doctrine, positioned by its degree of government intervention and focus on free trade. This helps illustrate how philosophies like Keynesianism and austerity occupy different spaces on the economic spectrum.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-center mb-4">Understanding the Concepts</h3>
+                    <p class="text-sm text-gray-600 mt-2">**Austerity** is a set of fiscal policies aimed at reducing government debt and deficits. It often involves sharp cuts to public spending, which can be seen as a core component of a neoliberal approach to economic management during a crisis.</p>
+                    <p class="text-sm text-gray-600 mt-2">**Keynesianism**, in contrast, advocates for government spending and tax cuts to stimulate demand and pull an economy out of a recession. It represents a high degree of state intervention to stabilize the economy.</p>
+                    <p class="text-sm text-gray-600 mt-2">**Mercantilism** is a historical economic system where the state uses its power to regulate trade and accumulate national wealth, primarily through exports and protectionist policies. It is a high-intervention, low free-trade model.</p>
+                    <p class="text-sm text-gray-600 mt-2">**Autarky** is the most extreme form of protectionism, where a nation aims for complete economic self-sufficiency, with minimal or no international trade. This is a defining characteristic of fascist economic policy.</p>
+                </div>
+            </div>
+        </section>
+
         <footer class="text-center mt-16 pt-8 border-t border-gray-300">
              <div class="card p-8 bg-[#00449E] text-white">
                 <h2 class="text-2xl md:text-4xl font-black">A Warning From History</h2>
@@ -425,6 +448,92 @@
                         ticks: {
                             display: false,
                             max: 100
+                        }
+                    }
+                }
+            }
+        });
+
+        const economicScatterCtx = document.getElementById('economicScatterChart').getContext('2d');
+        new Chart(economicScatterCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Economic Doctrines',
+                    data: [
+                        { x: 10, y: 90, label: 'Neoliberalism' },
+                        { x: 95, y: 10, label: 'Autarky' },
+                        { x: 80, y: 30, label: 'Mercantilism' },
+                        { x: 70, y: 55, label: 'Keynesianism' },
+                        { x: 30, y: 80, label: 'Austerity' }
+                    ],
+                    backgroundColor: [
+                        '#005CB9',
+                        '#00449E',
+                        '#3E92D5',
+                        '#6AAFE1',
+                        '#0072CE'
+                    ],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 2,
+                    pointRadius: 8,
+                    pointHoverRadius: 10
+                }]
+            },
+            options: {
+                ...commonChartOptions,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Free Trade Focus',
+                            color: '#4B5563',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: '#E5E7EB'
+                        },
+                        ticks: {
+                            color: '#4B5563'
+                        },
+                        min: 0,
+                        max: 100
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'State Intervention',
+                            color: '#4B5563',
+                            font: {
+                                weight: 'bold'
+                            }
+                        },
+                        grid: {
+                            color: '#E5E7EB'
+                        },
+                        ticks: {
+                            color: '#4B5563'
+                        },
+                        min: 0,
+                        max: 100
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (context.raw.label) {
+                                    label = context.raw.label;
+                                }
+                                return label;
+                            },
+                            title: function() { return ''; }
                         }
                     }
                 }
